@@ -1,2 +1,4 @@
 # severe-weather-outlook-map
-Interactive web map visualizing NOAA Storm Prediction Center convective outlooks using Leaflet and GeoJSON.
+Data © NOAA / Storm Prediction Center
+
+This project is an interactive web map for visualizing severe weather outlooks from the NOAA Storm Prediction Center. It uses Leaflet and GeoJSON to display categorical and probabilistic convective risk areas (tornado, hail, wind) across the United States.
