@@ -16,12 +16,15 @@ const riskColors = {
     "HIGH": "#ff00ff"
 };
 
-let day1Layer, day2Layer, day3Layer;
+let day1Layer;
 
-// Load outlook data
-async function loadOutlook(day) {
-    // Cache busting with timestamp
-    const url = `https://www.spc.noaa.gov/products/outlook/day${day}otlk.json?ts=${Date.now()}`;
+// Load Day 1 outlook from ArcGIS
+async function loadDay1Outlook() {
+    // NOAA's ArcGIS REST endpoint for SPC Day 1 outlooks
+    const url =
+        "https://mapservices.weather.noaa.gov/vector/rest/services/outlooks/SPC_wx_outlks/MapServer/1/query" +
+        "?where=1=1&outFields=*&f=geojson&ts=" + Date.now();
+
     const response = await fetch(url);
     const data = await response.json();
 
@@ -29,43 +32,32 @@ async function loadOutlook(day) {
         style: feature => ({
             color: "#000",
             weight: 1,
-            fillColor: riskColors[feature.properties.label] || "#cccccc",
+            fillColor: riskColors[feature.properties.CAT] || "#cccccc",
             fillOpacity: 0.4
         }),
         onEachFeature: (feature, layer) => {
             layer.bindPopup(
-                `<strong>${feature.properties.label}</strong><br>
-                ${feature.properties.name || ""}`
+                `<strong>${feature.properties.CAT}</strong><br>
+                    Issue: ${feature.properties.ISSUE}<br>
+                    Valid: ${feature.properties.VALID}`
             );
         }
     });
 }
 
-// Initialize layers
-async function initOutlooks() {
-    day1Layer = await loadOutlook(1);
-    day2Layer = await loadOutlook(2);
-    day3Layer = await loadOutlook(3);
-
-    const overlays = {
-        "Day 1 Outlook": day1Layer,
-        "Day 2 Outlook": day2Layer,
-        "Day 3 Outlook": day3Layer
-    };
-
-    L.control.layers(null, overlays).addTo(map);
-
-    // Default layer
+// Initial load
+async function init() {
+    day1Layer = await loadDay1Outlook();
     day1Layer.addTo(map);
 }
 
-initOutlooks();
+init();
 
-// Auto-refresh Day 1 every 10 minutes
+// Auto-refresh every 10 minutes
 setInterval(async () => {
     if (day1Layer) {
         map.removeLayer(day1Layer);
     }
-    day1Layer = await loadOutlook(1);
+    day1Layer = await loadDay1Outlook();
     day1Layer.addTo(map);
 }, 10 * 60 * 1000);
