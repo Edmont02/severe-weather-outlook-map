@@ -8,12 +8,12 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 // Risk colors
 const riskColors = {
-    "TSTM": "#c1e7c2",
-    "MRGL": "#8ebc82",
-    "SLGT": "#f6f57f",
-    "ENH":  "#e5c27e",
-    "MDT":  "#e77e81",
-    "HIGH": "#fe7eff"
+    "TSTM": "#90EE90",
+    "MRGL": "#008000",
+    "SLGT": "#FFFF00",
+    "ENH":  "#FFA500",
+    "MDT":  "#FF0000",
+    "HIGH": "#FF69B4"
 };
 
 // Map numeric dn codes to SPC risk labels
