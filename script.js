@@ -16,6 +16,17 @@ const riskColors = {
     "HIGH": "#fe7eff"
 };
 
+// Map numeric dn codes to SPC risk labels
+const dnToCat = {
+    1: "TSTM",   // sometimes unused
+    2: "TSTM",
+    3: "MRGL",
+    4: "SLGT",
+    5: "ENH",
+    6: "MDT",
+    7: "HIGH"
+};
+
 let day1Layer;
 
 // Load Day 1 outlook from ArcGIS
