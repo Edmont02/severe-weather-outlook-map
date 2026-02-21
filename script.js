@@ -32,6 +32,8 @@ async function loadDay1Outlook() {
         style: feature => {
             const rawCat = feature.properties.CAT;
 
+            console.log("Raw Cat:", rawCat, feature);
+
             // Normalize CAT safely
             const cat = rawCat
                 ? rawCat.trim().toUpperCase()
