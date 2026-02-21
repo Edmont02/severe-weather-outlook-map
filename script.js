@@ -8,12 +8,12 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 // Risk colors
 const riskColors = {
-    "TSTM": "#55bbff",
-    "MRGL": "#009900",
-    "SLGT": "#ffff00",
-    "ENH":  "#ff9900",
-    "MDT":  "#ff0000",
-    "HIGH": "#ff00ff"
+    "TSTM": "#c1e7c2",
+    "MRGL": "#8ebc82",
+    "SLGT": "#f6f57f",
+    "ENH":  "#e5c27e",
+    "MDT":  "#e77e81",
+    "HIGH": "#fe7eff"
 };
 
 let day1Layer;
@@ -29,12 +29,23 @@ async function loadDay1Outlook() {
     const data = await response.json();
 
     return L.geoJSON(data, {
-        style: feature => ({
-            color: "#000",
-            weight: 1,
-            fillColor: riskColors[feature.properties.CAT] || "#cccccc",
-            fillOpacity: 0.4
-        }),
+        style: feature => {
+            const rawCat = feature.properties.CAT;
+
+            // Normalize CAT safely
+            const cat = rawCat
+                ? rawCat.trim().toUpperCase()
+                : null;
+
+            const color = riskColors[cat] || "#cccccc";
+
+            return {
+                color: "#000",
+                weight: 1,
+                fillColor: color,
+                fillOpacity: 0.4
+            };
+        },
         onEachFeature: (feature, layer) => {
             layer.bindPopup(
                 `<strong>${feature.properties.CAT}</strong><br>
