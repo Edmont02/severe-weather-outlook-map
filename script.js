@@ -30,16 +30,12 @@ async function loadDay1Outlook() {
 
     return L.geoJSON(data, {
         style: feature => {
-            const rawCat = feature.properties.CAT;
+            const dn = feature.properties.dn;
+            const cat = dnToCat[dn] || null;
 
-            console.log("Raw Cat:", rawCat, feature);
-
-            // Normalize CAT safely
-            const cat = rawCat
-                ? rawCat.trim().toUpperCase()
-                : null;
-
-            const color = riskColors[cat] || "#cccccc";
+            console.log("dn:", dn, "cat:", cat);
+            // fallback to gray if category is unknown
+            const color = cat ? riskColors[cat] : "#cccccc";
 
             return {
                 color: "#000",
@@ -49,10 +45,13 @@ async function loadDay1Outlook() {
             };
         },
         onEachFeature: (feature, layer) => {
+            const dn = feature.properties.dn;
+            const cat = dnToCat[dn] || "Unknown";
+
             layer.bindPopup(
-                `<strong>${feature.properties.CAT}</strong><br>
-                    Issue: ${feature.properties.ISSUE}<br>
-                    Valid: ${feature.properties.VALID}`
+                `<strong>${cat}</strong><br>
+                Valid: ${feature.properties.valid}<br>
+                Expires: ${feature.properties.expire}`
             );
         }
     });
