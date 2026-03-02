@@ -66,6 +66,13 @@ const hazardProbStyles = {
     }
 };
 
+// Map layer IDs for categorical outlooks
+const CAT_LAYER_IDS = {
+    1: 1,
+    2: 9,
+    3: 17
+};
+
 // Hazard Outlook URLS for days 1 and 2
 const HAZARD_URLs = {
     1: {
@@ -86,13 +93,14 @@ let layerControl;
 let day1Tornado, day1Hail, day1Wind;
 let day2Tornado, day2Hail, day2Wind;
 
-// Load outlook from ArcGIS
+// Load categorical outlook for a given day
 async function loadDayOutlook(day) {
-    // Construct the URL for the given day
+    const layerId = CAT_LAYER_IDS[day];
+
     const url =
-        `https://mapservices.weather.noaa.gov/vector/rest/services/outlooks/SPC_wx_outlks/MapServer/${day}/query` +
+        `https://mapservices.weather.noaa.gov/vector/rest/services/outlooks/SPC_wx_outlks/MapServer/${layerId}/query` +
         `?where=1=1&outFields=*&f=geojson&ts=${Date.now()}`;
-    // Fetch the GeoJSON data from the ArcGIS service
+
     const response = await fetch(url);
     const data = await response.json();
 
@@ -101,14 +109,10 @@ async function loadDayOutlook(day) {
             const dn = feature.properties.dn;
             const cat = dnToCat[dn] || null;
 
-            console.log("dn:", dn, "cat:", cat);
-            // fallback to gray if category is unknown
-            const color = cat ? riskColors[cat] : "#cccccc";
-
             return {
                 color: "#000",
                 weight: 1,
-                fillColor: color,
+                fillColor: cat ? riskColors[cat] : "#cccccc",
                 fillOpacity: 0.4
             };
         },
@@ -116,11 +120,11 @@ async function loadDayOutlook(day) {
             const dn = feature.properties.dn;
             const cat = dnToCat[dn] || "Unknown";
 
-            layer.bindPopup(
-                `<strong>${cat}</strong><br>
+            layer.bindPopup(`
+                <strong>${cat}</strong><br>
                 Valid: ${feature.properties.valid}<br>
-                Expires: ${feature.properties.expire}`
-            );
+                Expires: ${feature.properties.expire}
+            `);
         }
     });
 }
