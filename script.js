@@ -151,7 +151,7 @@ function getSigStyle() {
 }
 
 // Load hazard layer from ArcGIS
-async function loadArcGISLayer(layerId, style) {
+async function loadArcGISLayer(layerId, style, hazard) {
     const url =
         `https://mapservices.weather.noaa.gov/vector/rest/services/outlooks/SPC_wx_outlks/MapServer/${layerId}/query` +
         `?where=1=1&outFields=*&f=geojson&ts=${Date.now()}`;
@@ -179,13 +179,15 @@ async function loadHazardLayer(day, hazard) {
     // Probabilistic
     const probLayer = await loadArcGISLayer(
         ids[1],
-        getHazardStyle(hazard)
+        getHazardStyle(hazard),
+        hazard
     );
 
     // Significant
     const sigLayer = await loadArcGISLayer(
         ids[0],
-        getSigStyle()
+        getSigStyle(),
+        hazard
     );
 
     layerGroup.addLayer(probLayer);
