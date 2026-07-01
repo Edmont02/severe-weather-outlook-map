@@ -11,6 +11,7 @@ let day1Layer, day2Layer, day3Layer;
 let layerControl;
 let day1Tornado, day1Hail, day1Wind;
 let day2Tornado, day2Hail, day2Wind;
+let day3Severe;
 
 // Map CAT days to data location
 const CAT_LAYER_IDS = {
@@ -32,6 +33,9 @@ const HAZARD_URLs = {
         tornado: [10, 11],
         hail: [12, 13],
         wind: [14, 15]
+    },
+    3: {
+        severe: [18, 19]
     }
 };
 
@@ -124,6 +128,9 @@ async function init() {
     day2Hail = await loadHazardOutlook(2, "hail");
     day2Wind = await loadHazardOutlook(2, "wind");
 
+    // day 3 severe weather probability
+    day3Severe = await loadHazardOutlook(3, "severe")
+
     // layer control
     layerControl = L.control.layers(null, {
         // categorical outlook layers
@@ -137,7 +144,9 @@ async function init() {
         // day 2 hazards
         "Day 2 Tornado": day2Tornado,
         "Day 2 Hail": day2Hail,
-        "Day 2 Wind": day2Wind
+        "Day 2 Wind": day2Wind,
+        // day 3 severe
+        "Day 3 Severe Probability Outlook": day3Severe
     }, 
     { collapsed: false }).addTo(map);
 }
