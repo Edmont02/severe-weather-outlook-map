@@ -1,10 +1,54 @@
 // initialize the map with USA centered view
+// use these coordinates if the users disagrees to sharing locaiton
+// or if there is an error / failure in securing location
 var map = L.map('map').setView([39.5, -98.35], 4);
 // base map
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 }).addTo(map);
+
+// accessing users geolocation
+function getLocation() {
+    if (navigator.geolocation) {
+        // ask user for permission
+        navigator.geolocation.getCurrentPosition(loc_success, loc_error);
+    }
+    else {
+        alert("Geolocation is not supported by this browser.");
+    }
+}
+
+// if geolocation is obtained
+function loc_success(position) {
+    const latitude = position.coords.latitude;
+    const longitude = position.coords.longitude;
+
+    map.setView([latitude, longitude], 16);
+
+    L.marker([latitude, longitude])
+        .addTo(map)
+        .bindPopup("Your location.")
+        .openPopup();
+}
+
+// if error accessing user geolocation
+function loc_error(error) {
+    switch(error.code) {
+        case error.PERMISSION_DENIED:
+            alert("User denied the request for Geolocation.");
+            break;
+        case error.POSITION_UNAVAILABLE:
+            alert("Location information is unavailable.");
+            break;
+        case error.TIMEOUT:
+            alert("The request to get user locaiton timed out.");
+            break;
+        case error.UNKNOWN_ERROR:
+            alert("An unknown error occurred.");
+            break;
+    }
+}
 
 // Layer References
 let day1Layer, day2Layer, day3Layer;
@@ -149,6 +193,9 @@ async function init() {
         "Day 3 Severe Probability Outlook": day3Severe
     }, 
     { collapsed: false }).addTo(map);
+
+    // ask for user location
+    getLocation();
 }
 
 init();
