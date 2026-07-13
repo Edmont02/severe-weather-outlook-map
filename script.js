@@ -1,10 +1,20 @@
-// initialize the map with USA centered view
-// use these coordinates if the users disagrees to sharing locaiton
-// or if there is an error / failure in securing location
-var map = L.map('map').setView([39.5, -98.35], 4);
+// define the maximum bounds of the world
+var southWest = L.latLng(-89.9, -180);
+var northEast = L.latLng(89.9, 180);
+var bounds = L.latLngBounds(southWest, northEast);
+
+// initialize the map with restrictions
+var map = L.map('map', {
+    minZoom: 3,                     // Prevents zooming out too far
+    maxBounds: bounds,              // Locks camera within world map
+    maxBoundsViscosity: 1.0,        // Stops user from dragging past bounds
+    bounceAtZoomLimits: false       // Prevents snapping into grey zone at lowest zoom
+}).setView([39.5, -98.35], 5);
+
 // base map
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
+    noWrap: true,
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 }).addTo(map);
 
