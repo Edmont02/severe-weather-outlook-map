@@ -46,7 +46,9 @@ function loc_success(position) {
 function loc_error(error) {
     switch(error.code) {
         case error.PERMISSION_DENIED:
-            alert("User denied the request for Geolocation.");
+            // alert("User denied the request for Geolocation.");
+            // add to console log instead of alerting user to their decision
+            console.log("User denied the request for Geolocation.")
             break;
         case error.POSITION_UNAVAILABLE:
             alert("Location information is unavailable.");
@@ -171,7 +173,6 @@ async function init() {
     // add day 1 layer by default
     day1Layer.addTo(map);
 
-    // hazard layers
     // day 1 hazards
     day1Tornado = await loadHazardOutlook(1, "tornado");
     day1Hail = await loadHazardOutlook(1, "hail");
@@ -201,8 +202,7 @@ async function init() {
         "Day 2 Wind": day2Wind,
         // day 3 severe
         "Day 3 Severe Probability Outlook": day3Severe
-    }, 
-    { collapsed: false }).addTo(map);
+    }).addTo(map);
 
     // ask for user location
     getLocation();
