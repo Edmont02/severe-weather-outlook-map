@@ -188,20 +188,23 @@ async function init() {
 
     // layer control
     layerControl = L.control.layers(null, {
-        // categorical outlook layers
+        
+        // Day 1 Outlook
         "Day 1 Categorical Outlook": day1Layer,
-        "Day 2 Categorical Outlook": day2Layer,
-        "Day 3 Categorical Outlook": day3Layer,
-        // day 1 hazards
         "Day 1 Tornado": day1Tornado,
         "Day 1 Hail": day1Hail,
         "Day 1 Wind": day1Wind,
-        // day 2 hazards
+
+        // Day 2 Outlook
+        "Day 2 Categorical Outlook": day2Layer,
         "Day 2 Tornado": day2Tornado,
         "Day 2 Hail": day2Hail,
         "Day 2 Wind": day2Wind,
-        // day 3 severe
+
+        //Day 3 Outlook
+        "Day 3 Categorical Outlook": day3Layer,
         "Day 3 Severe Probability Outlook": day3Severe
+
     }).addTo(map);
 
     // ask for user location
