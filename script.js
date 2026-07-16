@@ -15,7 +15,7 @@ var map = L.map('map', {
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
     noWrap: true,
-    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    attribution: '&copy; <a href="http://openstreetmap.org">OpenStreetMap</a> | Data: <a href="https://mapservices.weather.noaa.gov/vector/rest/services/outlooks/SPC_wx_outlks/MapServer" target="_blank">NOAA / Storm Prediction Center</a>'
 }).addTo(map);
 
 // accessing users geolocation
